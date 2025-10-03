@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sub4Sub: YouTube Channel Growth</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">Sub4Sub</div>
+            <nav>
+                <form id="search-form" class="search-form">
+                    <input type="search" id="search-input" placeholder="Find a user..." required>
+                    <button type="submit" id="search-btn"><i class="fas fa-search"></i></button>
+                </form>
+                <ul>
+                    <li><button class="nav-link active" data-page="discover-page"><i class="fas fa-search"></i> Discover</button></li>
+                    <li><button class="nav-link" data-page="my-videos-page"><i class="fas fa-video"></i> My Videos</button></li>
+                    <li><button class="nav-link" data-page="subscribers-page"><i class="fas fa-users"></i> My Subscribers</button></li>
+                    <li><button class="nav-link" data-page="referral-page"><i class="fas fa-gift"></i> Refer & Earn</button></li>
+                    <li><button class="nav-link" data-page="buy-coins-page"><i class="fas fa-shopping-cart"></i> Buy Coins</button></li>
+                    <li><button class="nav-link" data-page="gift-page"><i class="fas fa-hand-holding-heart"></i> Gift</button></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <p>Welcome, <span id="user-channel-name">ChannelName</span>!</p>
+                    <p class="coin-balance"><i class="fas fa-coins"></i> <span id="user-coins">0</span> AwaqiCoins</p>
+                </div>
+                <button class="nav-link logout-btn" id="logout-nav"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                
+                <div class="contact-info">
+                    <p>Contact us:</p>
+                    <p><a href="mailto:etafanta.awaqi@gmail.com">etafanta.awaqi@gmail.com</a></p>
+                    <p><a href="https://t.me/etafanta_user">Telegram Channel: Awaqi Tech</a></p>
+                    <!-- --- CHANGE --- The domain name has been updated here. -->
+                    <p><a href="http://www.subup.site" target="_blank" rel="noopener noreferrer">www.subup.site</a></p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="content-header">
+                <h1 id="page-title">Discover Channels</h1>
+            </header>
+            
+            <section id="discover-page" class="page active-page">
+                <h2>Sponsored Links (Earn 3 Coins!)</h2>
+                <div class="video-grid" id="sponsored-links-grid">
+                    <!-- Sponsored links will be injected here by JS -->
+                </div>
+                <hr>
+                <h2>Discover New Channels</h2>
+                <div class="video-grid" id="discover-links-grid">
+                    <!-- Discover links will be injected here by JS -->
+                </div>
+            </section>
+
+            <section id="my-videos-page" class="page">
+                <h2>Manage Your Videos</h2>
+                <form id="add-video-form" class="add-video-form">
+                    <input type="url" id="video-url-input" placeholder="e.g., https://www.youtube.com/watch?v=yourvideoid" required>
+                    <button type="submit" class="btn-primary">Add Video</button>
+                </form>
+                <p class="form-note">Your first video is free. Each additional video costs 3 AwaqiCoins.</p>
+                <div id="my-videos-list" class="my-videos-list"></div>
+                    <!-- My videos will be rendered here -->
+                <hr>
+
+                <h2>Subscription Updates</h2>
+                <div id="subscription-updates-list" class="subscription-updates-list">
+                    <!-- Notifications will be rendered here by JS -->
+                </div>
+            </section>
+
+            <section id="subscribers-page" class="page">
+                <h2>Subscribe Back to Continue</h2>
+                <p>You must subscribe back to these channels before you can subscribe to new channels on the Discover page.</p>
+                <div class="subscribe-back-list" id="subscribe-back-list">
+                    <!-- "Subscribe Back" requests will be injected here by JS -->
+                </div>
+            </section>
+
+            <section id="referral-page" class="page">
+                <h2>Refer Friends, Earn Coins!</h2>
+                <div class="referral-container">
+                    <p>Share your unique code with friends. When they create an account using your code, you will automatically receive <strong>5 bonus AwaqiCoins!</strong> And the new user receive <strong>3 AwaqiCoins!</strong></p>
+                    <div class="referral-code-wrapper">
+                        <span id="user-referral-code" class="referral-code">LOADING...</span>
+                        <button id="copy-referral-btn" class="btn-secondary"><i class="fas fa-copy"></i> Copy Code</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="buy-coins-page" class="page">
+                <h2>Buy AwaqiCoins</h2>
+                <div class="buy-coins-container">
+                    <p>1 AwaqiCoin = 1 ETB (Minimum purchase: 25 Coins)</p>
+                    <div class="telebirr-info">
+                        <h3>Deposit via Telebirr</h3>
+                        <p><strong>Account Name:</strong> Tedla</p>
+                        <p><strong>Phone:</strong> +251910857625</p>
+                    </div>
+                    <label for="deposit-amount-input">Amount in ETB:</label>
+                    <input type="number" id="deposit-amount-input" placeholder="e.g., 25">
+
+                    <label for="deposit-phone-input">Your Phone Number:</label>
+                    <input type="tel" id="deposit-phone-input" placeholder="Enter the phone number you used to deposit">
+                    
+                    <p class="form-note">
+                        After depositing, please upload a photo/screenshot on Telegram: 
+                        <a href="https://t.me/awaqitech" target="_blank" rel="noopener noreferrer">https://t.me/awaqitech</a>
+                    </p>
+                    
+                    <button class="btn-primary" id="confirm-payment-btn">Confirm Payment</button>
+                </div>
+            </section>
+
+            <section id="gift-page" class="page">
+                <h2>Support Us 🙏</h2>
+                <div class="gift-container">
+                    <p>If you enjoy using Sub4Sub, you can show your appreciation by gifting AwaqiCoins. Your support helps us maintain and improve the platform!</p>
+                    <form id="gift-form">
+                        <label for="gift-amount-input">Amount in AwaqiCoins:</label>
+                        <input type="number" id="gift-amount-input" placeholder="e.g., 50" min="1" required>
+                        <button type="submit" id="send-gift-btn" class="btn-primary">Send Gift</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="search-results-page" class="page">
+                <!-- Title will be set by JS -->
+                <div id="search-results-grid" class="search-results-grid">
+                    <!-- Search results will be rendered here -->
+                </div>
+            </section>
+
+            <section id="user-videos-page" class="page">
+                <!-- The title will be set dynamically by JS -->
+                <div id="user-videos-grid" class="video-grid">
+                    <!-- A specific user's videos will be rendered here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ======== MODALS ======== -->
+
+    <div id="video-watch-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3 id="video-modal-title">Watch & Subscribe</h3>
+            <div class="video-embed-container">
+                <div id="youtube-player"></div>
+            </div>
+            <div class="video-timer">
+                <p>You must watch for <span id="watch-timer">20</span> seconds.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="watch-progress-bar"></div>
+                </div>
+            </div>
+            <button class="btn-primary" id="subscribe-on-youtube-btn" disabled>
+                <i class="fab fa-youtube"></i> Subscribe on YouTube
+            </button>
+        </div>
+    </div>
+    
+    <div id="login-modal" class="modal-overlay active">
+        <div class="modal-content">
+            <div id="login-view">
+                <h3>Login to Sub4Sub</h3>
+                <form id="login-form">
+                    <input type="email" id="login-email" required placeholder="Email">
+                    <input type="password" id="login-password" required placeholder="Password">
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                <p class="form-switcher">New user? <a href="#" id="show-register-link">Register here</a>.</p>
+            </div>
+            <div id="register-view" class="hidden">
+                <h3>Create Your Account</h3>
+                <form id="register-form">
+                    <input type="email" id="register-email" required placeholder="Email">
+                    <input type="text" id="register-channel-name" required placeholder="Your YouTube Channel Name">
+                    <input type="password" id="register-password" required placeholder="Password">
+                    <input type="text" id="register-referral-code" placeholder="Referral Code (Optional)">
+                    <button type="submit" class="btn-primary">Register & Start</button>
+                </form>
+                <p class="form-switcher">Already have an account? <a href="#" id="show-login-link">Login here</a>.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mandatory-sub-modal" class="modal-overlay cannot-close">
+        <div class="modal-content">
+            <h3>Welcome! Complete Your First Step</h3>
+            <p>To unlock the platform, please watch and subscribe to our partner channel.</p>
+            <div class="video-embed-container">
+                <div id="mandatory-youtube-player"></div>
+            </div>
+            <div class="video-timer">
+                <p>You must watch for <span id="mandatory-watch-timer">20</span> seconds.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="mandatory-watch-progress-bar"></div>
+                </div>
+            </div>
+            <button class="btn-primary" id="mandatory-subscribe-btn" disabled>
+                <i class="fab fa-youtube"></i> Subscribe on YouTube
+            </button>
+            <p class="small-text">After subscribing on YouTube, come back here and click "Confirm".</p>
+            <button class="btn-secondary hidden" id="mandatory-confirm-btn">Confirm & Unlock App</button>
+        </div>
+    </div>
+    
+    <div id="boost-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Boost Your Channel!</h3>
+            <p>Get your link shown at the top of the Discover New Channels.</p>
+            <select id="boost-level-select">
+                <option value="100">Boost to 100 Users (Cost: 25 Coins)</option>
+                <option value="500">Boost to 500 Users (Cost: 125 Coins)</option>
+                <option value="1000">Boost to 1000 Users (Cost: 250 Coins)</option>
+            </select>
+            <button class="btn-primary" id="confirm-boost-btn">Confirm Boost</button>
+        </div>
+    </div>
+
+    <div id="refuse-sub-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3>Refuse Subscription</h3>
+            <p>Please provide a reason for not subscribing back to <strong id="refuse-channel-name"></strong>.</p>
+            <textarea id="refuse-reason-textarea" rows="4" placeholder="e.g., This channel is not in my niche..."></textarea>
+            <button class="btn-primary" id="submit-refuse-reason-btn">Submit and Continue</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>

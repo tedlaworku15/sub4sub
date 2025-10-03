@@ -1,0 +1,742 @@
+/* ======== GLOBAL & ROOT VARIABLES ======== */
+:root {
+    --primary-color: #FFD700; /* Gold */
+    --primary-hover: #f0c400;
+    --background-color: #121212;
+    --surface-color: #1e1e1e;
+    --surface-light: #2a2a2a;
+    --text-primary: #FFFFFF;
+    --text-secondary: #AAAAAA;
+    --border-color: #333333;
+    --success-color: #4CAF50;
+    --error-color: #F44336;
+    --sidebar-width: 260px;
+    --header-height: 70px;
+}
+
+/* ======== BASE STYLES ======== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0;
+}
+
+.hidden { display: none !important; }
+
+/* ======== NEW LAYOUT: SIDEBAR & MAIN CONTENT ======== */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--surface-color);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    height: 100%;
+    z-index: 1000;
+}
+
+.sidebar .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.sidebar nav {
+    flex-grow: 1;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar nav .nav-link i {
+    width: 20px; /* Align icons */
+}
+
+.sidebar nav .nav-link:hover {
+    background-color: var(--surface-light);
+    color: var(--text-primary);
+}
+
+.sidebar nav .nav-link.active {
+    background-color: var(--primary-color);
+    color: #000;
+}
+
+.sidebar .sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.sidebar .user-info {
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.sidebar .user-info p {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .coin-balance {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
+
+.sidebar .coin-balance .fa-coins {
+    color: var(--primary-color);
+}
+
+.sidebar .logout-btn {
+    width: 100%;
+    text-align: left;
+    color: var(--error-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar .logout-btn:hover {
+    background-color: var(--error-color);
+    color: #fff;
+}
+
+.content {
+    flex-grow: 1;
+    margin-left: var(--sidebar-width);
+    padding: 2rem 3rem;
+    width: calc(100% - var(--sidebar-width));
+}
+
+.content-header {
+    margin-bottom: 2rem;
+}
+
+.content-header #page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+.page.active-page { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+/* ======== VIDEO GRIDS ======== */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.video-card {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.video-card .thumbnail-container {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+    position: relative;
+    background-color: #000;
+}
+
+.video-card .thumbnail-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-card .card-content {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.video-card .channel-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.video-card .video-title {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ======== FORMS & BUTTONS ======== */
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--surface-light);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #555 !important;
+    color: #999 !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #000;
+}
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--surface-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* ======== SPECIFIC PAGE STYLES ======== */
+
+/* My Videos Page */
+.add-video-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    max-width: 800px;
+}
+.add-video-form input {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+.form-note {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+.my-videos-list .video-item,
+.subscribe-back-list .sub-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--surface-color);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.video-item .video-info h4, .sub-item .sub-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+.video-item .video-info p, .sub-item .sub-info p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+.video-item .actions, .sub-item .actions { display: flex; gap: 0.5rem; }
+
+/* Subscribers Page */
+.subscribe-back-list .sub-item {
+    border-left-color: var(--error-color);
+}
+.subscribe-back-list .sub-item .btn-primary {
+    background-color: var(--success-color);
+}
+
+/* Buy Coins Page */
+.buy-coins-container {
+    max-width: 600px;
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* ... (all previous styles remain the same) ... */
+
+/* Buy Coins Page */
+.buy-coins-container, .referral-container {
+    max-width: 600px;
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem; /* Space between containers */
+}
+
+/* --- CHANGE --- New styles for the Referral container */
+.referral-container p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+.referral-code-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--surface-light);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+.referral-code {
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    letter-spacing: 2px;
+}
+#copy-referral-btn {
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+/* ======== MODALS ======== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 550px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    line-height: 1;
+}
+.close-modal-btn:hover { color: var(--primary-color); }
+
+/* Login/Register Modal */
+#login-modal .modal-content { max-width: 400px; }
+.form-switcher { margin-top: 1rem; }
+.form-switcher a { color: var(--primary-color); text-decoration: none; cursor: pointer; }
+.form-switcher a:hover { text-decoration: underline; }
+
+/* ======== TOAST NOTIFICATION ======== */
+.toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(calc(-50% - var(--sidebar-width) / 2)); /* Adjust for sidebar */
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-weight: 700;
+    transition: bottom 0.5s ease-in-out;
+    z-index: 3000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.toast.show { bottom: 20px; }
+.toast.success { background-color: var(--success-color); }
+.toast.error { background-color: var(--error-color); }
+.toast.info { background-color: #2196F3; }
+
+/* ======== RESPONSIVE DESIGN ======== */
+@media (max-width: 992px) {
+    :root { --sidebar-width: 220px; }
+    .content { padding: 1.5rem; }
+    .content-header #page-title { font-size: 2rem; }
+    .sidebar .logo { font-size: 1.5rem; }
+    .sidebar nav .nav-link { font-size: 1rem; padding: 0.8rem; }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(calc(-1 * var(--sidebar-width)));
+        transition: transform 0.3s ease;
+        /* Logic to open/close sidebar would need JS, for now we hide and make content full width */
+        display: none; /* Simplest solution without JS for toggling */
+    }
+    .content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1.5rem;
+    }
+    .toast {
+        transform: translateX(-50%); /* Recenter toast */
+        width: 90%;
+    }
+    .video-item, .sub-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .video-item .actions, .sub-item .actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .content { padding: 1rem; }
+    .content-header #page-title { font-size: 1.6rem; }
+    h2 { font-size: 1.4rem; }
+    .add-video-form { flex-direction: column; }
+    .modal-content { padding: 1.5rem; }
+}
+
+/* ======== NEW STYLES for Boosted Videos ======== */
+
+.video-card.boosted-card {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.video-card.fading-out {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* ======== Subscription Updates Section ======== */
+.subscription-updates-list {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.update-item {
+    background-color: var(--surface-color);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--error-color); /* Use red to signify a refusal */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: opacity 0.5s ease;
+}
+
+.update-item p {
+    flex-grow: 1;
+    color: var(--text-secondary);
+}
+
+.update-item.fading-out {
+    opacity: 0;
+}
+
+/* ======== Search Bar & Results ======== */
+.sidebar .search-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.sidebar .search-form input {
+    flex-grow: 1;
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.sidebar .search-form button {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    min-width: 40px;
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.user-card {
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.user-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.user-card h4 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+/* Find the existing .user-card style */
+.user-card {
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; /* --- CHANGE --- Add this line */
+}
+
+/* ======== VIDEO GRIDS ======== */
+/* ... */
+
+.video-card {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* --- CHANGE --- Added relative positioning to contain the new close button. */
+    position: relative;
+}
+
+/* --- CHANGE --- Added all new styles for the close button. --- */
+.close-card-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--text-primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Not clickable when hidden */
+}
+
+.video-card:hover .close-card-btn {
+    opacity: 1; /* Show on hover of the card */
+    pointer-events: auto; /* Make it clickable when visible */
+}
+
+.close-card-btn:hover {
+    background-color: var(--error-color);
+    transform: scale(1.1);
+}
+/* --- End of new styles --- */
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* ... (all previous styles remain the same) ... */
+
+.sidebar .sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ... */
+
+.sidebar .logout-btn:hover {
+    background-color: var(--error-color);
+    color: #fff;
+}
+
+/* --- CHANGE --- Added new styles for the contact info block --- */
+.sidebar .contact-info {
+    margin-top: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.sidebar .contact-info p {
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .contact-info a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sidebar .contact-info a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+/* --- End of new styles --- */
+
+.content {
+    flex-grow: 1;
+    margin-left: var(--sidebar-width);
+    padding: 2rem 3rem;
+    width: calc(100% - var(--sidebar-width));
+}
+
+.gift-container {
+    max-width: 600px;
+    margin: 0 auto; /* Center the container */
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.gift-container p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+#gift-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* ... (rest of the file remains unchanged) ... */
