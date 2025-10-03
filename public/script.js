@@ -1,7 +1,7 @@
 // --- Heavily refactored for clarity, functionality, and deployment readiness.
 document.addEventListener('DOMContentLoaded', () => {
     // ======== GLOBAL STATE & CONSTANTS ========
-    const API_BASE_URL = 'http://localhost:3000';
+    const API_BASE_URL = ' https://sub4sub-vpup.onrender.com';
     const VIDEO_WATCH_TIME = 20; // seconds
 
     const appState = {
