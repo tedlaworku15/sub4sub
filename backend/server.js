@@ -1,4 +1,5 @@
 // server.js
+console.log("--- DEPLOYMENT V4 IS NOW LIVE AND SERVING FILES ---");
 
 const express = require('express');
 const mongoose = require('mongoose');
