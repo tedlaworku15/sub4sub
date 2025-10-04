@@ -479,9 +479,6 @@ button:disabled {
 
 @media (max-width: 768px) {
     .sidebar {
-        transform: translateX(calc(-1 * var(--sidebar-width)));
-        transition: transform 0.3s ease;
-        /* Logic to open/close sidebar would need JS, for now we hide and make content full width */
         display: none; /* Simplest solution without JS for toggling */
     }
     .content {
