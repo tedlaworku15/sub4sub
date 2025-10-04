@@ -85,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         userVideosGrid: document.getElementById('user-videos-grid'),
         giftForm: document.getElementById('gift-form'),
         giftAmountInput: document.getElementById('gift-amount-input'),
+        sidebar: document.querySelector('.sidebar'), // Select the sidebar itself
+        mobileMenuToggle: document.getElementById('mobile-menu-toggle'),
     };
 
     const api = {
@@ -697,9 +699,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ======== EVENT LISTENERS ========
     DOM.navLinks.forEach(link => link.addEventListener('click', () => showPage(link.dataset.page)));
+    DOM.sidebar.classList.remove('open');
     DOM.logoutNav.addEventListener('click', handleLogout);
     DOM.showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); showView('register'); });
     DOM.showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView('login'); });
+
+    DOM.mobileMenuToggle.addEventListener('click', () => {
+        DOM.sidebar.classList.toggle('open');
+    });
+
+    DOM.logoutNav.addEventListener('click', handleLogout);
 
     DOM.loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
