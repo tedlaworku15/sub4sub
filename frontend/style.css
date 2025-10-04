@@ -145,6 +145,29 @@ hr {
     color: #fff;
 }
 
+.sidebar .contact-info {
+    margin-top: 1.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.sidebar .contact-info p {
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .contact-info a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sidebar .contact-info a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
 .content {
     flex-grow: 1;
     margin-left: var(--sidebar-width);
@@ -194,6 +217,7 @@ h2 {
     flex-direction: column;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
 
 .video-card:hover {
@@ -233,6 +257,48 @@ h2 {
 .video-card .video-title {
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+.close-card-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--text-primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Not clickable when hidden */
+}
+
+.video-card:hover .close-card-btn {
+    opacity: 1; /* Show on hover of the card */
+    pointer-events: auto; /* Make it clickable when visible */
+}
+
+.close-card-btn:hover {
+    background-color: var(--error-color);
+    transform: scale(1.1);
+}
+
+.video-card.boosted-card {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.video-card.fading-out {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: scale(0.95);
 }
 
 /* ======== FORMS & BUTTONS ======== */
@@ -344,27 +410,15 @@ button:disabled {
     background-color: var(--success-color);
 }
 
-/* Buy Coins Page */
-.buy-coins-container {
+/* Buy Coins & Referral Pages */
+.buy-coins-container, .referral-container, .gift-container {
     max-width: 600px;
     background-color: var(--surface-color);
     padding: 2rem;
     border-radius: 8px;
+    margin: 0 auto 2rem auto;
 }
-
-/* ... (all previous styles remain the same) ... */
-
-/* Buy Coins Page */
-.buy-coins-container, .referral-container {
-    max-width: 600px;
-    background-color: var(--surface-color);
-    padding: 2rem;
-    border-radius: 8px;
-    margin-bottom: 2rem; /* Space between containers */
-}
-
-/* --- CHANGE --- New styles for the Referral container */
-.referral-container p {
+.referral-container p, .gift-container p {
     color: var(--text-secondary);
     margin-bottom: 1rem;
     text-align: center;
@@ -388,7 +442,85 @@ button:disabled {
     letter-spacing: 2px;
 }
 #copy-referral-btn {
-    flex-shrink: 0; /* Prevent button from shrinking */
+    flex-shrink: 0;
+}
+#gift-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* ======== Subscription Updates Section ======== */
+.subscription-updates-list {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+}
+.update-item {
+    background-color: var(--surface-color);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--error-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: opacity 0.5s ease;
+}
+.update-item p {
+    flex-grow: 1;
+    color: var(--text-secondary);
+}
+.update-item.fading-out {
+    opacity: 0;
+}
+
+/* ======== Search Bar & Results ======== */
+.sidebar .search-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+.sidebar .search-form input {
+    flex-grow: 1;
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+.sidebar .search-form button {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    min-width: 40px;
+}
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+.user-card {
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+    border-color: var(--primary-color);
+}
+.user-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+.user-card h4 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
 }
 
 /* ======== MODALS ======== */
@@ -407,12 +539,10 @@ button:disabled {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
 }
-
 .modal-content {
     background-color: var(--surface-color);
     padding: 2rem;
@@ -425,11 +555,9 @@ button:disabled {
     transform: scale(0.95);
     transition: transform 0.3s ease;
 }
-
 .modal-overlay.active .modal-content {
     transform: scale(1);
 }
-
 .close-modal-btn {
     position: absolute;
     top: 1rem;
@@ -442,8 +570,6 @@ button:disabled {
     line-height: 1;
 }
 .close-modal-btn:hover { color: var(--primary-color); }
-
-/* Login/Register Modal */
 #login-modal .modal-content { max-width: 400px; }
 .form-switcher { margin-top: 1rem; }
 .form-switcher a { color: var(--primary-color); text-decoration: none; cursor: pointer; }
@@ -454,7 +580,7 @@ button:disabled {
     position: fixed;
     bottom: -100px;
     left: 50%;
-    transform: translateX(calc(-50% - var(--sidebar-width) / 2)); /* Adjust for sidebar */
+    transform: translateX(calc(-50% - var(--sidebar-width) / 2));
     padding: 1rem 1.5rem;
     border-radius: 5px;
     color: var(--text-primary);
@@ -468,6 +594,37 @@ button:disabled {
 .toast.error { background-color: var(--error-color); }
 .toast.info { background-color: #2196F3; }
 
+/* ======== MOBILE MENU TOGGLE BUTTON ======== */
+.mobile-menu-toggle {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 1100;
+    padding: 0;
+    margin-right: 1rem;
+}
+
+/* ======== MOBILE MENU OVERLAY ======== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1999; /* Below the sidebar */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 /* ======== RESPONSIVE DESIGN ======== */
 @media (max-width: 992px) {
     :root { --sidebar-width: 220px; }
@@ -479,298 +636,25 @@ button:disabled {
 
 @media (max-width: 768px) {
     .sidebar {
-        display: none; /* Simplest solution without JS for toggling */
-    }
-    .content {
-        margin-left: 0;
-        width: 100%;
-        padding: 1.5rem;
-    }
-    .toast {
-        transform: translateX(-50%); /* Recenter toast */
-        width: 90%;
-    }
-    .video-item, .sub-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-    .video-item .actions, .sub-item .actions {
-        width: 100%;
-        justify-content: flex-end;
-    }
-}
-
-@media (max-width: 480px) {
-    .content { padding: 1rem; }
-    .content-header #page-title { font-size: 1.6rem; }
-    h2 { font-size: 1.4rem; }
-    .add-video-form { flex-direction: column; }
-    .modal-content { padding: 1.5rem; }
-}
-
-/* ======== NEW STYLES for Boosted Videos ======== */
-
-.video-card.boosted-card {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-}
-
-.video-card.fading-out {
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 0;
-    transform: scale(0.95);
-}
-
-/* ======== Subscription Updates Section ======== */
-.subscription-updates-list {
-    margin-top: 1.5rem;
-    display: grid;
-    gap: 1rem;
-}
-
-.update-item {
-    background-color: var(--surface-color);
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid var(--error-color); /* Use red to signify a refusal */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    transition: opacity 0.5s ease;
-}
-
-.update-item p {
-    flex-grow: 1;
-    color: var(--text-secondary);
-}
-
-.update-item.fading-out {
-    opacity: 0;
-}
-
-/* ======== Search Bar & Results ======== */
-.sidebar .search-form {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    padding: 0 0.5rem;
-}
-
-.sidebar .search-form input {
-    flex-grow: 1;
-    margin-bottom: 0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-}
-
-.sidebar .search-form button {
-    flex-shrink: 0;
-    padding: 0.5rem 0.75rem;
-    min-width: 40px;
-}
-
-.search-results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.user-card {
-    background-color: var(--surface-color);
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.user-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
-    border-color: var(--primary-color);
-}
-
-.user-card i {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-
-.user-card h4 {
-    font-size: 1.2rem;
-    color: var(--text-primary);
-}
-
-/* Find the existing .user-card style */
-.user-card {
-    background-color: var(--surface-color);
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer; /* --- CHANGE --- Add this line */
-}
-
-/* ======== VIDEO GRIDS ======== */
-/* ... */
-
-.video-card {
-    background-color: var(--surface-color);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* --- CHANGE --- Added relative positioning to contain the new close button. */
-    position: relative;
-}
-
-/* --- CHANGE --- Added all new styles for the close button. --- */
-.close-card-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 24px;
-    height: 24px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: var(--text-primary);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    opacity: 0; /* Initially hidden */
-    pointer-events: none; /* Not clickable when hidden */
-}
-
-.video-card:hover .close-card-btn {
-    opacity: 1; /* Show on hover of the card */
-    pointer-events: auto; /* Make it clickable when visible */
-}
-
-.close-card-btn:hover {
-    background-color: var(--error-color);
-    transform: scale(1.1);
-}
-/* --- End of new styles --- */
-
-.video-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
-    border-color: var(--primary-color);
-}
-
-/* ... (all previous styles remain the same) ... */
-
-.sidebar .sidebar-footer {
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
-/* ... */
-
-.sidebar .logout-btn:hover {
-    background-color: var(--error-color);
-    color: #fff;
-}
-
-/* --- CHANGE --- Added new styles for the contact info block --- */
-.sidebar .contact-info {
-    margin-top: 1.5rem;
-    padding: 0 0.5rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-align: center;
-}
-
-.sidebar .contact-info p {
-    margin-bottom: 0.25rem;
-}
-
-.sidebar .contact-info a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.sidebar .contact-info a:hover {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-/* --- End of new styles --- */
-
-.content {
-    flex-grow: 1;
-    margin-left: var(--sidebar-width);
-    padding: 2rem 3rem;
-    width: calc(100% - var(--sidebar-width));
-}
-
-.gift-container {
-    max-width: 600px;
-    margin: 0 auto; /* Center the container */
-    background-color: var(--surface-color);
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.gift-container p {
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-}
-
-#gift-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-/* ======== MOBILE MENU TOGGLE BUTTON ======== */
-.mobile-menu-toggle {
-    display: none; /* Hidden by default on desktop */
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    font-size: 1.8rem;
-    cursor: pointer;
-    z-index: 1100; /* Ensure it's on top */
-    padding: 0;
-    margin-right: 1rem;
-}
-
-/* ======== RESPONSIVE DESIGN CHANGES ======== */
-@media (max-width: 768px) {
-    .sidebar {
-        /* CHANGE: Instead of display: none, move it off-screen */
         position: fixed;
         left: 0;
         top: 0;
         height: 100%;
         transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-        z-index: 2000; /* Make sure it's above the content */
+        transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 2000;
+        visibility: hidden; /* Hide the sidebar completely when closed */
     }
 
     .sidebar.open {
-        /* This class will be toggled by JS to show the menu */
         transform: translateX(0);
+        visibility: visible; /* Make it visible when open */
     }
     
     .content {
         margin-left: 0;
         width: 100%;
-        padding: 1rem; /* Adjusted padding for smaller screens */
+        padding: 1rem;
     }
 
     .content-header {
@@ -779,11 +663,11 @@ button:disabled {
     }
 
     .mobile-menu-toggle {
-        display: block; /* Show the hamburger button on mobile */
+        display: block; /* Show the hamburger button */
     }
 
     .toast {
-        transform: translateX(-50%); /* Recenter toast */
+        transform: translateX(-50%);
         width: 90%;
     }
     .video-item, .sub-item {

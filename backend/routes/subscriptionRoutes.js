@@ -14,7 +14,6 @@ const Notification = require('../models/notification');
 // @access  Private
 router.post('/perform', protect, async (req, res) => {
     try {
-        // --- CHANGE --- The 'isSponsored' flag is removed from the request body for security.
         const { targetChannelId, linkId } = req.body;
         const subscriber = req.user;
 
@@ -29,7 +28,6 @@ router.post('/perform', protect, async (req, res) => {
         let rewardCoins = 0;
         let message = '';
 
-        // --- CHANGE --- All reward logic is now handled on the backend based on the video type.
         if (video.isSponsored) {
             // Rule: System-sponsored links give 3 coins from the system.
             rewardCoins = 3;
@@ -134,8 +132,6 @@ router.post('/subscribe-back/:id', protect, async (req, res) => {
         const originalSubscriber = await User.findById(subscription.subscriber); // The user who subscribed first (User A)
         const REWARD_AMOUNT = 1;
 
-        // --- CHANGE --- The entire logic is now conditional based on the original subscriber's balance.
-
         if (originalSubscriber.awaqiCoins < REWARD_AMOUNT) {
             // The original subscriber CANNOT afford the 1-coin reward.
             // We still confirm the subscription to clear it from the current user's queue.
@@ -186,8 +182,6 @@ router.post('/refuse/:id', protect, async (req, res) => {
         const refuser = req.user; // The current user who is refusing (User B)
         const originalSubscriber = subscription.subscriber; // The user who subscribed first (User A)
         const PENALTY_AMOUNT = 2;
-
-        // --- CHANGE --- Entire logic is now a peer-to-peer penalty transfer.
         
         // Check if the refuser can afford the penalty.
         if (refuser.awaqiCoins < PENALTY_AMOUNT) {
@@ -217,7 +211,7 @@ router.post('/refuse/:id', protect, async (req, res) => {
 
         res.json({ 
             message: `Subscription refused. ${PENALTY_AMOUNT} AwaqiCoins have been paid to the other user.`,
-            newCoins: refuser.awaqiCoins // Return the refuser's new, lower coin balance.
+            newCoins: refuser.awaqiCoins
         });
 
     } catch (error) {
@@ -226,6 +220,9 @@ router.post('/refuse/:id', protect, async (req, res) => {
     }
 });
 
+// @desc    Get IDs of channels the current user has already subscribed to
+// @route   GET /api/subscriptions/my-subscription-ids
+// @access  Private
 router.get('/my-subscription-ids', protect, async (req, res) => {
     try {
         const subscriptions = await Subscription.find({ 
@@ -235,7 +232,7 @@ router.get('/my-subscription-ids', protect, async (req, res) => {
 
         const ids = subscriptions.map(sub => sub.subscribedTo);
         res.json(ids);
-    } catch (error) { // --- FIX --- Corrected syntax from `catch (error {` to `catch (error) {`
+    } catch (error) {
         console.error("Error fetching subscription IDs:", error);
         res.status(500).json({ message: 'Server Error getting subscription IDs' });
     }

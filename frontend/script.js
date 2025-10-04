@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         giftAmountInput: document.getElementById('gift-amount-input'),
         sidebar: document.querySelector('.sidebar'), // Select the sidebar itself
         mobileMenuToggle: document.getElementById('mobile-menu-toggle'),
+        menuOverlay: document.getElementById('menu-overlay'),
     };
 
     const api = {
@@ -698,17 +699,42 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ======== EVENT LISTENERS ========
-    DOM.navLinks.forEach(link => link.addEventListener('click', () => showPage(link.dataset.page)));
-    DOM.sidebar.classList.remove('open');
-    DOM.logoutNav.addEventListener('click', handleLogout);
-    DOM.showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); showView('register'); });
-    DOM.showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView('login'); });
-
-    DOM.mobileMenuToggle.addEventListener('click', () => {
-        DOM.sidebar.classList.toggle('open');
+    
+    // --- Mobile Menu & Navigation Logic ---
+    
+    // When a nav link is clicked, show the correct page and close the mobile menu.
+    DOM.navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            showPage(link.dataset.page);
+            // Close menu and overlay after clicking a link
+            DOM.sidebar.classList.remove('open');
+            DOM.menuOverlay.classList.remove('active');
+        });
     });
 
+    // A reusable function to toggle the mobile menu and the background overlay.
+    const toggleMenu = () => {
+        DOM.sidebar.classList.toggle('open');
+        DOM.menuOverlay.classList.toggle('active');
+    };
+
+    // Assign the toggle function to the hamburger button and the overlay itself.
+    DOM.mobileMenuToggle.addEventListener('click', toggleMenu);
+    DOM.menuOverlay.addEventListener('click', toggleMenu);
+
+    // --- Authentication & Modals ---
+
     DOM.logoutNav.addEventListener('click', handleLogout);
+    
+    DOM.showRegisterLink.addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        showView('register'); 
+    });
+
+    DOM.showLoginLink.addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        showView('login'); 
+    });
 
     DOM.loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -738,12 +764,13 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (modal) hideModal(modal);
     }));
 
+    // --- Page-Specific Forms & Actions ---
+
     DOM.giftForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const amount = parseInt(DOM.giftAmountInput.value, 10);
         const giftButton = DOM.giftForm.querySelector('button');
 
-        // --- Client-side validation for immediate feedback ---
         if (!amount || amount <= 0) {
             return showToast('Please enter a valid amount to gift.', 'error');
         }
@@ -756,14 +783,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const data = await api.sendGift(amount);
-            
-            // Update state and UI on success
             appState.coins = data.newCoins;
             updateUI();
-            
-            DOM.giftAmountInput.value = ''; // Clear the input
+            DOM.giftAmountInput.value = '';
             showToast(data.message, 'success');
-
         } catch (error) {
             showToast(error.message, 'error');
         } finally {
@@ -817,16 +840,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.disabled = true;
         try {
             const data = await api.refuseSubscription(subId, reason);
-            
             appState.coins = data.newCoins;
             updateUI();
-
             hideModal(DOM.refuseSubModal);
             appState.subscribers = appState.subscribers.filter(s => s._id !== subId);
             renderSubscribersPage();
             showToast(data.message, "success");
             document.getElementById('refuse-reason-textarea').value = '';
-
         } catch (error) {
             showToast(error.message, "error");
         } finally {

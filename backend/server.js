@@ -29,7 +29,7 @@ app.use(express.json());
 // This tells Express to serve files like index.html, style.css, and script.js
 // It assumes your frontend is in a folder named 'public' at the root of your project.
 // If your folder is named 'frontend', change 'public' to 'frontend'.
-const staticPath = path.join(__dirname, '..', 'public');
+const staticPath = path.join(__dirname, '..', 'frontend');
 app.use(express.static(staticPath));
 // --- END OF FIX ---
 
