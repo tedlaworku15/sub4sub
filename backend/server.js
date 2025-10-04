@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const { Telegraf } = require('telegraf');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 const User = require('./models/user');
 const Payment = require('./models/payment');
 
@@ -34,21 +35,33 @@ const staticPath = path.join(__dirname, '..', 'public');
 app.use(express.static(staticPath));
 // --- END OF FIX ---
 
-app.get('/debug-structure', (req, res) => {
-    const currentDirectory = __dirname;
-    const parentDirectory = path.join(__dirname, '..');
-
-    const currentDirContents = fs.readdirSync(currentDirectory);
-    const parentDirContents = fs.readdirSync(parentDirectory);
+// --- SAFER FORENSIC DEBUG ROUTE ---
+app.get('/debug-path', (req, res) => {
+    // We will test the two most likely paths for your index.html file.
+    const pathA = path.join(__dirname, '..', 'public', 'index.html');
+    const pathB = path.join(__dirname, 'public', 'index.html');
+    
+    const pathAExists = fs.existsSync(pathA);
+    const pathBExists = fs.existsSync(pathB);
+    
+    let conclusion = "Still not found. Check your build settings on your hosting provider.";
+    if (pathAExists) {
+        conclusion = "SUCCESS: Your frontend is in the PARENT directory. Use the path with '..'.";
+    }
+    if (pathBExists) {
+        conclusion = "SUCCESS: Your frontend is in the CURRENT directory. Use the path WITHOUT '..'.";
+    }
 
     res.json({
-        message: "This is the server's file structure.",
-        current_directory_is: currentDirectory,
-        contents_of_current_directory: currentDirContents,
-        parent_directory_is: parentDirectory,
-        contents_of_parent_directory: parentDirContents,
+        message: "This is a safe check for your index.html file path.",
+        path_A_to_test: pathA,
+        path_A_exists: pathAExists,
+        path_B_to_test: pathB,
+        path_B_exists: pathBExists,
+        conclusion: conclusion
     });
 });
+// --- END OF SAFER DEBUG ROUTE ---
 
 // --- API ROUTES ---
 app.use('/api/auth', require('./routes/authRoutes'));
