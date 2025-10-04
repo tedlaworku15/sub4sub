@@ -34,6 +34,22 @@ const staticPath = path.join(__dirname, '..', 'public');
 app.use(express.static(staticPath));
 // --- END OF FIX ---
 
+app.get('/debug-structure', (req, res) => {
+    const currentDirectory = __dirname;
+    const parentDirectory = path.join(__dirname, '..');
+
+    const currentDirContents = fs.readdirSync(currentDirectory);
+    const parentDirContents = fs.readdirSync(parentDirectory);
+
+    res.json({
+        message: "This is the server's file structure.",
+        current_directory_is: currentDirectory,
+        contents_of_current_directory: currentDirContents,
+        parent_directory_is: parentDirectory,
+        contents_of_parent_directory: parentDirContents,
+    });
+});
+
 // --- API ROUTES ---
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/videos', require('./routes/videoRoutes'));
