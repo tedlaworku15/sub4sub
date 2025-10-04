@@ -1,5 +1,4 @@
-// server.js
-console.log("--- DEPLOYMENT V4 IS NOW LIVE AND SERVING FILES ---");
+// server.js (Final Production Version)
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -8,60 +7,27 @@ const dotenv = require('dotenv');
 const { Telegraf } = require('telegraf');
 const path = require('path');
 const http = require('http');
-const fs = require('fs');
 const User = require('./models/user');
 const Payment = require('./models/payment');
 
-// Load environment variables from .env file
 dotenv.config();
-
-// Initialize Express app and create an HTTP server for SSE
 const app = express();
 const server = http.createServer(app);
 
-// Create a global object to store active client connections for Server-Sent Events (SSE)
 const sseClients = {};
 app.set('sse_clients', sseClients);
 
-// --- CORE MIDDLEWARE ---
 app.use(cors());
 app.use(express.json());
 
-// --- CRITICAL FIX: SERVE STATIC FRONTEND FILES ---
-// This tells Express to serve files like index.html, style.css, and script.js
-// It assumes your frontend is in a folder named 'public' at the root of your project.
-// If your folder is named 'frontend', change 'public' to 'frontend'.
+
+// --- THE FINAL, PROVEN-CORRECT STATIC FILE CONFIGURATION ---
+// The debug route confirmed this is the correct path for your Render deployment.
+// It looks for a 'public' folder in the parent directory of where this script is running.
 const staticPath = path.join(__dirname, '..', 'public');
 app.use(express.static(staticPath));
 // --- END OF FIX ---
 
-// --- SAFER FORENSIC DEBUG ROUTE ---
-app.get('/debug-path', (req, res) => {
-    // We will test the two most likely paths for your index.html file.
-    const pathA = path.join(__dirname, '..', 'public', 'index.html');
-    const pathB = path.join(__dirname, 'public', 'index.html');
-    
-    const pathAExists = fs.existsSync(pathA);
-    const pathBExists = fs.existsSync(pathB);
-    
-    let conclusion = "Still not found. Check your build settings on your hosting provider.";
-    if (pathAExists) {
-        conclusion = "SUCCESS: Your frontend is in the PARENT directory. Use the path with '..'.";
-    }
-    if (pathBExists) {
-        conclusion = "SUCCESS: Your frontend is in the CURRENT directory. Use the path WITHOUT '..'.";
-    }
-
-    res.json({
-        message: "This is a safe check for your index.html file path.",
-        path_A_to_test: pathA,
-        path_A_exists: pathAExists,
-        path_B_to_test: pathB,
-        path_B_exists: pathBExists,
-        conclusion: conclusion
-    });
-});
-// --- END OF SAFER DEBUG ROUTE ---
 
 // --- API ROUTES ---
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -70,12 +36,13 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/payments', require('./routes/paymentRoutes'));
 app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
 
+
 // --- CATCH-ALL ROUTE FOR SINGLE-PAGE APP ---
-// This ensures that if a user refreshes the page on a route like /my-videos,
-// the server still sends the main index.html file to let the frontend handle routing.
+// This ensures your app works even if the user refreshes a page.
 app.get('*', (req, res) => {
     res.sendFile(path.join(staticPath, 'index.html'));
 });
+
 
 // --- DATABASE CONNECTION ---
 const connectDB = async () => {
@@ -84,16 +51,14 @@ const connectDB = async () => {
         console.log('[DB] MongoDB Connected successfully.');
     } catch (err) {
         console.error('[DB] MongoDB Connection Error:', err.message);
-        process.exit(1); // Exit process with failure
+        process.exit(1);
     }
 };
 
 // --- TELEGRAM BOT SETUP & LOGIC ---
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
-const ADMIN_TELEGRAM_ID = process.env.ADMIN_TELEGRAM_ID;
-app.set('bot', bot); // Make bot instance available to other files (like paymentRoutes)
+app.set('bot', bot);
 
-// Bot handler for the "Accept" button
 bot.action(/approve_(.+)/, async (ctx) => {
     try {
         const paymentId = ctx.match[1];
@@ -109,7 +74,6 @@ bot.action(/approve_(.+)/, async (ctx) => {
         await user.save();
         await payment.save();
 
-        // Logic to send a real-time update to the user's browser via SSE
         const client = sseClients[user._id.toString()];
         if (client) {
             const payload = {
@@ -118,7 +82,6 @@ bot.action(/approve_(.+)/, async (ctx) => {
             };
             client.write(`event: payment_update\n`);
             client.write(`data: ${JSON.stringify(payload)}\n\n`);
-            console.log(`[SSE] Sent payment_update to user ${user._id}`);
         }
 
         await ctx.editMessageText(`✅ Payment Accepted for ${user.channelName}. ${payment.coinsPurchased} coins credited.`);
@@ -129,7 +92,6 @@ bot.action(/approve_(.+)/, async (ctx) => {
     }
 });
 
-// Bot handler for the "Reject" button
 bot.action(/reject_(.+)/, async (ctx) => {
     try {
         const paymentId = ctx.match[1];
@@ -143,7 +105,6 @@ bot.action(/reject_(.+)/, async (ctx) => {
         
         const user = await User.findById(payment.user);
 
-        // Logic to notify the user of rejection in real-time
         const client = sseClients[user._id.toString()];
         if (client) {
              const payload = {
@@ -161,8 +122,8 @@ bot.action(/reject_(.+)/, async (ctx) => {
     }
 });
 
-// Launch the Telegram bot
-bot.launch().then(() => console.log('[BOT] Telegram bot is running and listening for actions...'));
+bot.launch().then(() => console.log('[BOT] Telegram bot is running...'));
+
 
 // --- START THE SERVER ---
 const PORT = process.env.PORT || 3000;
